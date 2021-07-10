@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/match1"
+    tools:context=".GameSettingFragment">
+
+    <TextView
+        android:id="@+id/setting_info_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:fontFamily="@font/thisfont"
+        android:text="게임 제목"
+        android:textColor="@color/match2"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_input_title"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toLeftOf="@id/leftline"
+        app:layout_constraintRight_toLeftOf="@id/setting_input_title"
+        app:layout_constraintTop_toTopOf="@+id/setting_input_title" />
+
+    <EditText
+        android:id="@+id/setting_input_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/thisfont"
+        android:hint="게임 제목을 입력해주세요"
+        android:imeOptions="actionDone"
+        android:maxLines="1"
+        android:singleLine="true"
+        app:layout_constraintLeft_toRightOf="@+id/setting_info_text"
+        app:layout_constraintRight_toRightOf="@id/rightline"
+        tools:layout_editor_absoluteY="1dp" />
+
+    <Button
+        android:id="@+id/btn_add_new_person"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/btn_layout2"
+        android:fontFamily="@font/thisfont"
+        android:text="새로운 사람 추가하기"
+        android:textColor="@color/match2"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="@id/leftline"
+        app:layout_constraintRight_toLeftOf="@+id/btn_perfect"
+        app:layout_constraintTop_toBottomOf="@id/setting_input_title" />
+
+    <Button
+        android:id="@+id/btn_perfect"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/btn_layout2"
+        android:fontFamily="@font/thisfont"
+        android:text="완료"
+        android:textColor="@color/match2"
+        app:layout_constraintLeft_toRightOf="@id/btn_add_new_person"
+        app:layout_constraintRight_toRightOf="@id/rightline"
+        app:layout_constraintTop_toTopOf="@id/btn_add_new_person" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/add_person_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
+        android:background="@drawable/btn_layout2"
+        app:layout_constrainedHeight="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/exist_header"
+        app:layout_constraintEnd_toEndOf="@id/rightline"
+        app:layout_constraintStart_toStartOf="@id/leftline"
+        app:layout_constraintTop_toBottomOf="@+id/btn_perfect"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintVertical_weight="3"
+        tools:listitem="@layout/item_setting_person" />
+
+    <TextView
+        android:id="@+id/exist_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/thisfont"
+        android:gravity="center"
+        android:text="최근 플레이한 사람 목록"
+        android:textColor="@color/match2"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@id/exist_person_recycler"
+        app:layout_constraintEnd_toEndOf="@id/rightline"
+        app:layout_constraintStart_toStartOf="@id/leftline"
+        app:layout_constraintTop_toBottomOf="@id/add_person_recycler"
+        app:layout_constraintVertical_weight="1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:padding="5dp"
+        android:id="@+id/exist_person_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/btn_layout2"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="@id/underline"
+        app:layout_constraintEnd_toEndOf="@id/rightline"
+        app:layout_constraintStart_toStartOf="@id/leftline"
+        app:layout_constraintTop_toBottomOf="@id/exist_header"
+        app:layout_constraintVertical_weight="1"
+        app:spanCount="3"
+        tools:listitem="@layout/item_setting_person_name" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/underline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="10dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

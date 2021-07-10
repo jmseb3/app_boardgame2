@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:id="@+id/item_exist_all"
+    android:layout_margin="2dp"
+    android:background="@drawable/item_person_layout">
+
+    <TextView
+        android:id="@+id/item_person_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:fontFamily="@font/thisfont"
+        android:textColor="@color/match2"
+        android:layout_gravity="center"
+        android:text="이미있던 사람 이름"
+        android:textSize="15sp" />
+
+</LinearLayout>

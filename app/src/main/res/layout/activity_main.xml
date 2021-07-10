@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/match1"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@color/match2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_main">
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main">
+
+        <Button
+            android:id="@+id/btn_start_new_game_main_frag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/btn_layout2"
+            android:fontFamily="@font/thisfont"
+            android:text="새 게임 시작하기"
+            android:textColor="@color/match2" />
+
+        <Button
+            android:id="@+id/btn_continue_game_main_frag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/btn_layout2"
+            android:fontFamily="@font/thisfont"
+            android:text="게임 이어하기"
+            android:textColor="@color/match2" />
+
+        <TextView
+            android:id="@+id/play_game_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/thisfont"
+            android:gravity="center"
+            android:text="현재 ~ 를 플레이 중입니다."
+            android:textColor="@color/match2" />
+
+        <Button
+            android:id="@+id/btn_game_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/btn_layout2"
+            android:fontFamily="@font/thisfont"
+            android:text="게임 목록"
+            android:textColor="@color/match2" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/mainactivitytitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|left"
+        android:fontFamily="@font/thisfont"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@color/match1"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/toolbar_main"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_main" />
+
+    <FrameLayout
+        android:id="@+id/frag_area"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

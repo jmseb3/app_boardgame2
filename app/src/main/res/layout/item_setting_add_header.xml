@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/item_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/match2"
+        android:fontFamily="@font/thisfont"
+        android:text="참여자 명단"
+        android:textSize="25sp" />
+
+    <ImageView
+        android:layout_below="@+id/item_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/line"
+
+        android:id="@+id/line"/>
+
+
+
+</RelativeLayout>
