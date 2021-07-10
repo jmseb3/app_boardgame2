@@ -3,7 +3,9 @@ package com.wonddak.boardmaster
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.wonddak.boardmaster.databinding.ItemSettingPersonBinding
@@ -13,6 +15,7 @@ import java.util.*
 class GameSettingRecyclerAdapter(
     val itemlist: MutableList<String>,
     val context: Context,
+    val fragment: GameSettingFragment,
     val type: Int
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -38,7 +41,17 @@ class GameSettingRecyclerAdapter(
         val name = binding.itemPersonName
 
         init {
-
+            name.setOnClickListener {
+                if(itemlist.size ==1){
+                    changeVisibility(fragment.binding.existHeader)
+                    changeVisibility(fragment.binding.existPersonRecycler)
+                    changeVisibility(fragment.binding.btnShow)
+                }
+                fragment.addpersonlist.add(name.text.toString())
+                itemlist.removeAt(layoutPosition)
+                fragment.myAdapter!!.notifyDataSetChanged()
+                notifyDataSetChanged()
+            }
         }
     }
 
@@ -112,6 +125,15 @@ class GameSettingRecyclerAdapter(
         }
         return false
     }
+
+    private fun changeVisibility(view: View) {
+        if (view.visibility == View.GONE) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
+    }
+
 
 }
 

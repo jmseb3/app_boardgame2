@@ -8,10 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
 import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.wonddak.boardmaster.databinding.FragmentGameSettingBinding
 import com.wonddak.boardmaster.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
@@ -20,11 +23,15 @@ import kotlinx.coroutines.launch
 
 class GameSettingFragment : Fragment() {
     private var mainActivity: MainActivity? = null
-    private lateinit var binding: FragmentGameSettingBinding
+    lateinit var binding: FragmentGameSettingBinding
     private lateinit var db: AppDatabase
 
-    private var myAdapter: GameSettingRecyclerAdapter? = null
-    private var myAdapter2: GameSettingRecyclerAdapter? = null
+    var myAdapter: GameSettingRecyclerAdapter? = null
+    var myAdapter2: GameSettingRecyclerAdapter? = null
+
+    val existpersonlist by lazy { requireArguments().getStringArrayList("exist") }
+    var addpersonlist = mutableListOf<String>()
+    val title by lazy { requireArguments().getString("title") }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,18 +39,6 @@ class GameSettingFragment : Fragment() {
         binding = FragmentGameSettingBinding.inflate(inflater, container, false)
         db = AppDatabase.getInstance(requireContext())
 
-        val prefs: SharedPreferences = requireContext().getSharedPreferences("game", 0)
-        val editor = prefs.edit()
-        var addpersonlist = mutableListOf<String>("수정", "사랑해", "정말", "수정", "아사", "랑해", "정말")
-        var existpersonlist = mutableListOf<String>()
-        GlobalScope.launch(Dispatchers.IO) {
-            existpersonlist = db.dataDao().getPersonName().toSet().toMutableList()
-            launch(Dispatchers.Main) {
-                myAdapter2 = GameSettingRecyclerAdapter(existpersonlist, requireContext(), 1)
-                binding.existPersonRecycler.adapter = myAdapter2
-            }
-        }
-        myAdapter = GameSettingRecyclerAdapter(addpersonlist, requireContext(), 0)
         val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(UP + DOWN, 0) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -61,15 +56,31 @@ class GameSettingFragment : Fragment() {
                 return true
             }
         })
+        val prefs: SharedPreferences = requireContext().getSharedPreferences("game", 0)
+        val editor = prefs.edit()
+
+        existpersonlist as MutableList<String>
+
+        myAdapter =
+            GameSettingRecyclerAdapter(addpersonlist, requireContext(), this@GameSettingFragment, 0)
+        myAdapter2 =
+            GameSettingRecyclerAdapter( existpersonlist!!,requireContext(),this@GameSettingFragment, 1)
+        binding.existPersonRecycler.adapter = myAdapter2
         touchHelper.attachToRecyclerView(binding.addPersonRecycler)
         binding.addPersonRecycler.adapter = myAdapter
+
+        binding.existHeader.setOnClickListener {
+            changeVisibility2(binding.existPersonRecycler,binding.btnShow)
+        }
 
 
 
         binding.btnAddNewPerson.setOnClickListener {
-            Log.d("datas", "" + addpersonlist)
-            changeVisibility(binding.existHeader)
-            changeVisibility(binding.existPersonRecycler)
+            AddDialog(
+                requireContext(),
+                mainActivity!!
+            ).addNewPersonDialog(addpersonlist,myAdapter!!)
+
         }
 
 //        GlobalScope.launch(Dispatchers.IO) {
@@ -102,13 +113,20 @@ class GameSettingFragment : Fragment() {
         mainActivity = null
     }
 
-    private fun changeVisibility(view: View) {
+    private fun changeVisibility2(view: View,view2:ImageView) {
         if (view.visibility == View.GONE) {
             view.visibility = View.VISIBLE
+            Glide.with(requireContext())
+                .load(R.drawable.ic_baseline_arrow_drop_up_24)
+                .into(view2)
         } else {
             view.visibility = View.GONE
+            Glide.with(requireContext())
+                .load(R.drawable.ic_baseline_arrow_drop_down_24)
+                .into(view2)
         }
     }
+
 
 
 }

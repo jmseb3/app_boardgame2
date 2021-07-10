@@ -14,6 +14,7 @@ import com.wonddak.boardmaster.room.StartGame
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -25,31 +26,29 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         db = AppDatabase.getInstance(this)
-
         setSupportActionBar(binding.toolbarMain)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         val prefs: SharedPreferences = this.getSharedPreferences("boardgame", 0)
         var iddata = prefs.getInt("iddata", 0)
 
-        GlobalScope.launch(Dispatchers.IO) {
-            iddata = db.dataDao().insertGame(StartGame(null, "시험")).toInt()
-            db.dataDao().insertPerson(
-                PersonList(
-                    null,
-                    iddata,
-                    "수정",
-                    mutableListOf("3", "4", "7", "9", "10")
-                )
-            )
-        }
 
         binding.btnStartNewGameMainFrag.setOnClickListener {
-            supportFragmentManager
-                .beginTransaction()
-                .addToBackStack(null)
-                .add(R.id.frag_area, GameSettingFragment())
-                .commit()
+            GlobalScope.launch(Dispatchers.IO) {
+                val temp = db.dataDao().getPersonName().toSet().toMutableList()
+                launch(Dispatchers.Main) {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .add(R.id.frag_area, GameSettingFragment().apply {
+                            arguments = Bundle().apply {
+                                putStringArrayList("exist",temp as ArrayList<String>)
+                            }
+                        })
+                        .commit()
+                }
+            }
+
 
 
         }
@@ -63,6 +62,33 @@ class MainActivity : AppCompatActivity() {
 //                }
 //                Log.d("datas", "" + sum)
 //            }
+            GlobalScope.launch(Dispatchers.IO) {
+                iddata = db.dataDao().insertGame(StartGame(null, "시험")).toInt()
+                db.dataDao().insertPerson(
+                    PersonList(
+                        null,
+                        iddata,
+                        "수정",
+                        mutableListOf("3", "4", "7", "9", "10")
+                    )
+                )
+                db.dataDao().insertPerson(
+                    PersonList(
+                        null,
+                        iddata,
+                        "원희",
+                        mutableListOf("5", "4", "7", "9", "10")
+                    )
+                )
+                db.dataDao().insertPerson(
+                    PersonList(
+                        null,
+                        iddata,
+                        "아재",
+                        mutableListOf("3", "4", "7", "9", "10")
+                    )
+                )
+            }
         }
     }
 

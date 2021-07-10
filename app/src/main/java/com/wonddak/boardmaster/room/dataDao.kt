@@ -29,7 +29,7 @@ interface DataDao {
     @Query("SELECT * FROM StartGame WHERE gameId=:gameId")
     fun getGameNameAndPersonNByUd(gameId: Int): List<StartGameWithPersonList>
 
-    @Query("SELECT personName FROM PersonList")
+    @Query("SELECT personName FROM PersonList LIMIT 30")
     fun getPersonName(): List<String>
 
 
