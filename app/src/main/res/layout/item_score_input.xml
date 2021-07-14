@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:id="@+id/item_all"
+    android:background="@color/match2"
+    android:orientation="horizontal"
+    android:layout_height="50dp">
+    
+    <EditText
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:id="@+id/item_edit_score"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/thisfont"
+        android:imeOptions="actionNext"
+        android:nextFocusRight="@id/item_edit_score"
+        android:inputType="number"
+        android:background="@null"
+        android:layout_gravity="center"
+        android:digits="0123456789-"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:textColor="@color/match1">
+
+    </EditText>
+
+</RelativeLayout>

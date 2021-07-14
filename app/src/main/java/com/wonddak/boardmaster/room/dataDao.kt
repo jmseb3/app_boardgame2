@@ -25,9 +25,9 @@ interface DataDao {
     @Query("SELECT * FROM PersonList WHERE InGameId=:gameId")
     fun getPersonDataByGameId(gameId: Int): List<PersonList>
 
+    @Query("SELECT personName FROM PersonList WHERE InGameId=:gameId")
+    fun getPersonNameByGameId(gameId: Int): List<String>
 
-    @Query("SELECT * FROM StartGame WHERE gameId=:gameId")
-    fun getGameNameAndPersonNByUd(gameId: Int): List<StartGameWithPersonList>
 
     @Query("SELECT personName FROM PersonList LIMIT 30")
     fun getPersonName(): List<String>
@@ -36,5 +36,8 @@ interface DataDao {
     @Transaction
     @Query("SELECT * FROM StartGame")
     fun getGameNameAndPerson(): List<StartGameWithPersonList>
+
+    @Query("SELECT * FROM StartGame WHERE gameId=:gameId")
+    fun getGameNameAndPersonNByUd(gameId: Int): List<StartGameWithPersonList>
 
 }

@@ -23,7 +23,7 @@ data class PersonList(
     @PrimaryKey(autoGenerate = true) val personId: Int?,
     val InGameId: Int,
     val personName: String,
-    val scoreList : List<String>
+    val scoreList : List<String>? = listOf()
 )
 
 data class StartGameWithPersonList(

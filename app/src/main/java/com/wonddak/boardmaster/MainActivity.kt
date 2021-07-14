@@ -6,7 +6,10 @@ import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.wonddak.boardmaster.databinding.ActivityMainBinding
 import com.wonddak.boardmaster.room.AppDatabase
 import com.wonddak.boardmaster.room.PersonList
@@ -20,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: AppDatabase
     private var backKeyPressedTime: Long = 0
+    var live_Id :MutableLiveData<Int> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +35,24 @@ class MainActivity : AppCompatActivity() {
 
         val prefs: SharedPreferences = this.getSharedPreferences("boardgame", 0)
         var iddata = prefs.getInt("iddata", 0)
+        live_Id.value = iddata
+        live_Id.observe(this, Observer {
+            if (it == 0) {
+                binding.btnContinueGameMainFrag.visibility = View.GONE
+                binding.playGameInfo.visibility = View.GONE
+            } else {
+                GlobalScope.launch(Dispatchers.IO) {
+                    val name_temp = db.dataDao().getGameNameById(it)
+                    launch(Dispatchers.Main) {
+                        binding.playGameInfo.text = "현재 \"$name_temp\"을(를) 플레이 중입니다."
+                        binding.btnContinueGameMainFrag.visibility = View.VISIBLE
+                        binding.playGameInfo.visibility = View.VISIBLE
+                    }
+                }
+            }
+        })
+
+
 
 
         binding.btnStartNewGameMainFrag.setOnClickListener {
@@ -42,53 +64,17 @@ class MainActivity : AppCompatActivity() {
                         .addToBackStack(null)
                         .add(R.id.frag_area, GameSettingFragment().apply {
                             arguments = Bundle().apply {
-                                putStringArrayList("exist",temp as ArrayList<String>)
+                                putStringArrayList("exist", temp as ArrayList<String>)
                             }
                         })
                         .commit()
                 }
             }
 
-
-
         }
+
         binding.btnContinueGameMainFrag.setOnClickListener {
-//            GlobalScope.launch(Dispatchers.IO) {
-//                Log.d("datas", db.dataDao().getGameNameById(iddata))
-//                val data = db.dataDao().getPersonDataByGameId(iddata)[0].scoreList
-//                var sum =0
-//                val data2 = data.forEach {
-//                    sum += it.toInt()
-//                }
-//                Log.d("datas", "" + sum)
-//            }
-            GlobalScope.launch(Dispatchers.IO) {
-                iddata = db.dataDao().insertGame(StartGame(null, "시험")).toInt()
-                db.dataDao().insertPerson(
-                    PersonList(
-                        null,
-                        iddata,
-                        "수정",
-                        mutableListOf("3", "4", "7", "9", "10")
-                    )
-                )
-                db.dataDao().insertPerson(
-                    PersonList(
-                        null,
-                        iddata,
-                        "원희",
-                        mutableListOf("5", "4", "7", "9", "10")
-                    )
-                )
-                db.dataDao().insertPerson(
-                    PersonList(
-                        null,
-                        iddata,
-                        "아재",
-                        mutableListOf("3", "4", "7", "9", "10")
-                    )
-                )
-            }
+
         }
     }
 
@@ -114,14 +100,12 @@ class MainActivity : AppCompatActivity() {
             binding.mainactivitytitle.text = "보드게임 매니저"
         } else if (supportFragmentManager.backStackEntryCount == 2) {
             binding.mainactivitytitle.text = "보드게임 매니저"
-            this.recreate()
             supportActionBar!!.setDisplayHomeAsUpEnabled(false)
             for (i in 0..1) {
                 supportFragmentManager.popBackStack()
             }
         }
     }
-
 
     fun getScreenSize(activity: Activity): Point? {
         val display = activity.windowManager.defaultDisplay
