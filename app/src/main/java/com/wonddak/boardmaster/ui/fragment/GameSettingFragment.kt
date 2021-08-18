@@ -1,29 +1,32 @@
-package com.wonddak.boardmaster
+package com.wonddak.boardmaster.ui.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
 import androidx.recyclerview.widget.ItemTouchHelper.UP
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.wonddak.boardmaster.R
+import com.wonddak.boardmaster.adapters.GameSettingRecyclerAdapter
 import com.wonddak.boardmaster.databinding.FragmentGameSettingBinding
 import com.wonddak.boardmaster.room.AppDatabase
 import com.wonddak.boardmaster.room.PersonList
 import com.wonddak.boardmaster.room.StartGame
+import com.wonddak.boardmaster.ui.PersonAddDialog
+import com.wonddak.boardmaster.ui.MainActivity
+import com.wonddak.boardmaster.ui.ScoreBoardActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.ArrayList
 
 class GameSettingFragment : Fragment() {
     private var mainActivity: MainActivity? = null
@@ -89,9 +92,8 @@ class GameSettingFragment : Fragment() {
         }
 
 
-
         binding.btnAddNewPerson.setOnClickListener {
-            AddDialog(
+            PersonAddDialog(
                 mainActivity!!
             ).addNewPersonDialog(addpersonlist, myAdapter!!)
 
@@ -125,11 +127,14 @@ class GameSettingFragment : Fragment() {
 
                         }
                         launch(Dispatchers.Main) {
+                            val intent = Intent(mainActivity!!,ScoreBoardActivity::class.java)
+                            startActivity(intent)
+                            mainActivity!!.overridePendingTransition(0,0)
                             requireActivity().supportFragmentManager
                                 .beginTransaction()
-                                .addToBackStack(null)
-                                .add(R.id.frag_area,GameScoreBoardFragment())
+                                .remove(this@GameSettingFragment)
                                 .commit()
+
                         }
                     }
                 }

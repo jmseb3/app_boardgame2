@@ -1,4 +1,4 @@
-package com.wonddak.boardmaster
+package com.wonddak.boardmaster.ui
 
 import android.app.Activity
 import android.content.SharedPreferences
@@ -10,20 +10,22 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.wonddak.boardmaster.R
 import com.wonddak.boardmaster.databinding.ActivityMainBinding
 import com.wonddak.boardmaster.room.AppDatabase
-import com.wonddak.boardmaster.room.PersonList
-import com.wonddak.boardmaster.room.StartGame
+import com.wonddak.boardmaster.ui.fragment.GameSettingFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.ArrayList
+import android.util.DisplayMetrics
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: AppDatabase
     private var backKeyPressedTime: Long = 0
-    var live_Id :MutableLiveData<Int> = MutableLiveData()
+    var live_Id: MutableLiveData<Int> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +63,6 @@ class MainActivity : AppCompatActivity() {
                 launch(Dispatchers.Main) {
                     supportFragmentManager
                         .beginTransaction()
-                        .addToBackStack(null)
                         .add(R.id.frag_area, GameSettingFragment().apply {
                             arguments = Bundle().apply {
                                 putStringArrayList("exist", temp as ArrayList<String>)
@@ -107,10 +108,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getScreenSize(activity: Activity): Point? {
-        val display = activity.windowManager.defaultDisplay
-        val size = Point()
-        display.getSize(size)
-        return size
-    }
 }

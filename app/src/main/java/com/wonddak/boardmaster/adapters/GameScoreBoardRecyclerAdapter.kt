@@ -1,4 +1,4 @@
-package com.wonddak.boardmaster
+package com.wonddak.boardmaster.adapters
 
 import android.app.Activity
 import android.content.Context
@@ -7,23 +7,30 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.wonddak.boardmaster.databinding.ItemScoreInputBinding
 import com.wonddak.boardmaster.databinding.ItemScoreNameBinding
 import com.wonddak.boardmaster.databinding.ItemScoreRankBinding
+import com.wonddak.boardmaster.ui.ScoreBoardActivity
+import java.lang.NumberFormatException
 
 
 class GameScoreBoardRecyclerAdapter(
     val personList: List<String>,
+    var boardMap: MutableMap<Int, IntArray>,
     val type: Int,
     val context: Context,
+    val sumlist: MutableLiveData<IntArray>,
+    val activity:ScoreBoardActivity
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val TYPE_HEADER = 0
     val TYPE_ITEM = 1
     val TYPE_RANK = 2
-    val TYPE_SUM = 3
 
 //    val db = AppDatabase.getInstance(context)
 //    val prefs: SharedPreferences = context.getSharedPreferences("boardgame", 0)
@@ -34,13 +41,6 @@ class GameScoreBoardRecyclerAdapter(
         RecyclerView.ViewHolder(binding.root) {
         var header = binding.itemPersonName
     }
-
-    inner class ScoreSumViewHolder(binding: ItemScoreNameBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        var header = binding.itemPersonName
-        var itemall = binding.itemAll
-    }
-
 
     inner class ScoreViewHolder(binding: ItemScoreInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -61,9 +61,6 @@ class GameScoreBoardRecyclerAdapter(
             2 -> {
                 TYPE_RANK
             }
-            3 -> {
-                TYPE_SUM
-            }
             else -> {
                 TYPE_ITEM
             }
@@ -75,20 +72,22 @@ class GameScoreBoardRecyclerAdapter(
         when (viewType) {
             TYPE_HEADER -> {
                 val binding =
-                    ItemScoreNameBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemScoreNameBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 sizeChange(binding.itemAll)
                 return ScoreHeaderViewHolder(binding)
             }
             TYPE_RANK -> {
                 val binding =
-                    ItemScoreRankBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                    ItemScoreRankBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    )
                 return RankViewHolder(binding)
-            }
-            TYPE_SUM -> {
-                val binding =
-                    ItemScoreNameBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                sizeChange(binding.itemAll)
-                return ScoreSumViewHolder(binding)
             }
             else -> {
                 val binding = ItemScoreInputBinding.inflate(
@@ -107,21 +106,58 @@ class GameScoreBoardRecyclerAdapter(
         when (holder) {
             is ScoreHeaderViewHolder -> {
                 holder.header.text = personList[position]
+
             }
             is RankViewHolder -> {
                 holder.rank.text = "#" + (position + 1)
             }
             is ScoreViewHolder -> {
+                val round = position / personList.size
+                val idx = position % personList.size
+                holder.item.setText(boardMap[round + 1]!![idx].toString())
 
+                holder.item.setOnEditorActionListener { v, actionId, event ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        try {
+                            val round = position / personList.size
+                            val idx = position % personList.size
+                            boardMap[round + 1]!![idx] = holder.item.text.toString().toInt()
+                            if (position == boardMap.size * personList.size - 1) {
+                                boardMap[boardMap.size + 1] = IntArray(personList.size) { 0 }
 
+                            }
+                            sumlist.value = Cal_sum()
+                            holder.item.clearFocus()
+                        } catch (e: NumberFormatException) {
+                            holder.item.setText("0")
+                            Toast.makeText(context, "숫자를 입력해주세요", Toast.LENGTH_SHORT).show()
+                        }finally {
+                            notifyDataSetChanged()
+                            activity.RoundAdapter!!.notifyDataSetChanged()
+                        }
+
+                        true
+                    }
+                    true
+
+                }
             }
-            is ScoreSumViewHolder -> {
 
-
-            }
         }
 
 
+    }
+
+
+    private fun Cal_sum(): IntArray {
+        val temp = IntArray(personList.size) { 0 }
+        for (idx in personList.indices) {
+            for (row in boardMap.values) {
+                temp[idx] += row[idx]
+            }
+
+        }
+        return temp
     }
 
 
@@ -130,30 +166,27 @@ class GameScoreBoardRecyclerAdapter(
             0 -> {
                 personList.size
             }
-//            1 -> {
-//                scoreList.size
-//            }
-//            2 -> {
-//                round
-//            }
+            1 -> {
+                personList.size * boardMap.size
+            }
             else -> {
-                personList.size
+                boardMap.size
             }
         }
     }
 
 
     private fun sizeChange(view: View) {
+
         val displaymetrics = DisplayMetrics()
         (view.context as Activity).windowManager.defaultDisplay.getMetrics(displaymetrics)
-        var devicewidth = displaymetrics.widthPixels
-
-        devicewidth = if (personList.size == 2) {
-            (devicewidth - dpToPx(context, 62)) / 2
+        var device_width = displaymetrics.widthPixels
+        device_width = if (personList.size == 2) {
+            (device_width - dpToPx(context, 62)) / 2
         } else {
-            (devicewidth - dpToPx(context, 60 + 1 * personList.size)) / 3
+            (device_width - dpToPx(context, 60 +1*personList.size)) / 3
         }
-        view.layoutParams.width = devicewidth
+        view.layoutParams.width = device_width
         view.requestLayout()
     }
 

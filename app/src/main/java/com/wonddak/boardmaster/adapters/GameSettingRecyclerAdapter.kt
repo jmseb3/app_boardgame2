@@ -1,13 +1,11 @@
-package com.wonddak.boardmaster
+package com.wonddak.boardmaster.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.wonddak.boardmaster.ui.fragment.GameSettingFragment
 import com.wonddak.boardmaster.databinding.ItemSettingPersonBinding
 import com.wonddak.boardmaster.databinding.ItemSettingPersonNameBinding
 import java.util.*

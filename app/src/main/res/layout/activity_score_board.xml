@@ -5,20 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/match1"
-    tools:context=".GameScoreBoardFragment">
+    tools:context=".ui.ScoreBoardActivity">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/match2"
+        app:layout_constraintBottom_toBottomOf="@id/underline"
+        app:layout_constraintEnd_toStartOf="@id/rightline"
+        app:layout_constraintStart_toEndOf="@id/leftline"
+        app:layout_constraintTop_toTopOf="@id/topline"></View>
+
 
     <HorizontalScrollView
-        android:id="@+id/game_scroll_header"
+        android:id="@+id/header_scroll"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/game_score"
         app:layout_constraintEnd_toEndOf="@id/rightline"
         app:layout_constraintStart_toStartOf="@id/leftline2"
         app:layout_constraintTop_toTopOf="@id/topline">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/game_recycler_header"
@@ -32,22 +43,21 @@
     </HorizontalScrollView>
 
     <ScrollView
-        android:id="@+id/game_scroll_rank"
+        android:id="@+id/round_scroll"
         android:layout_width="40dp"
         android:layout_height="0dp"
         android:scrollbars="none"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@id/game_scroll_sum"
-        app:layout_constraintEnd_toStartOf="@id/game_scroll_score_horizontal"
+        app:layout_constraintBottom_toTopOf="@id/sum_scroll"
+        app:layout_constraintEnd_toStartOf="@id/game_score"
         app:layout_constraintStart_toStartOf="@id/leftline"
         app:layout_constraintTop_toTopOf="@id/topline2">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/game_recycler_rank"
+                android:id="@+id/game_recycler_round"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -59,52 +69,55 @@
     </ScrollView>
 
     <HorizontalScrollView
-        android:id="@+id/game_scroll_score_horizontal"
+        android:id="@+id/game_score"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@id/game_scroll_sum"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@id/sum_scroll"
         app:layout_constraintEnd_toEndOf="@id/rightline"
-        app:layout_constraintStart_toEndOf="@id/game_scroll_rank"
-        app:layout_constraintTop_toBottomOf="@+id/game_scroll_header">
+        app:layout_constraintLeft_toRightOf="@id/leftline2"
+        app:layout_constraintStart_toEndOf="@id/round_scroll"
+        app:layout_constraintTop_toBottomOf="@+id/header_scroll">
 
         <ScrollView
-            android:id="@+id/game_scroll_score_vertical"
-            android:layout_width="match_parent"
+            android:id="@+id/game_score_vertical_scroll"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scrollbars="none">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:overScrollMode="never">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/game_recycler_score"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:focusable="true"
                     android:orientation="vertical"
-                    android:overScrollMode="never"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constrainedHeight="true"
                     tools:listitem="@layout/item_score_input" />
 
             </RelativeLayout>
-
-
         </ScrollView>
     </HorizontalScrollView>
 
     <HorizontalScrollView
-        android:id="@+id/game_scroll_sum"
+        android:id="@+id/sum_scroll"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@id/underline"
-        app:layout_constraintStart_toStartOf="@id/leftline2"
         app:layout_constraintEnd_toEndOf="@id/rightline"
-        app:layout_constraintTop_toBottomOf="@+id/game_scroll_rank">
+        app:layout_constraintStart_toStartOf="@id/leftline2"
+        app:layout_constraintTop_toBottomOf="@+id/round_scroll">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
@@ -118,6 +131,7 @@
         </RelativeLayout>
 
     </HorizontalScrollView>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftline"
@@ -161,4 +175,32 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="10dp" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/match1"
+        app:layout_constraintBottom_toBottomOf="@id/topline2"
+        app:layout_constraintEnd_toStartOf="@id/rightline"
+        app:layout_constraintStart_toEndOf="@id/leftline"
+        app:layout_constraintTop_toTopOf="@id/topline2">
+    </View>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/match1"
+        app:layout_constraintBottom_toTopOf="@id/sum_scroll"
+        app:layout_constraintEnd_toStartOf="@id/rightline"
+        app:layout_constraintStart_toEndOf="@id/leftline"
+        app:layout_constraintTop_toTopOf="@id/sum_scroll">
+    </View>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/match1"
+        app:layout_constraintBottom_toBottomOf="@id/sum_scroll"
+        app:layout_constraintEnd_toStartOf="@id/leftline2"
+        app:layout_constraintStart_toEndOf="@id/leftline2"
+        app:layout_constraintTop_toTopOf="@id/header_scroll">
+    </View>
 </androidx.constraintlayout.widget.ConstraintLayout>

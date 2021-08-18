@@ -1,19 +1,17 @@
-package com.wonddak.boardmaster
+package com.wonddak.boardmaster.ui
 
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
+import com.wonddak.boardmaster.adapters.GameSettingRecyclerAdapter
 import com.wonddak.boardmaster.databinding.DialogAddNewPersonBinding
 import com.wonddak.boardmaster.room.AppDatabase
 
 
-class AddDialog(
+class PersonAddDialog(
         val context: Context
 ) {
     val dialog = Dialog(context)
