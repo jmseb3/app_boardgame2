@@ -24,13 +24,14 @@ class GameScoreBoardRecyclerAdapter(
     val type: Int,
     val context: Context,
     val sumlist: MutableLiveData<IntArray>,
-    val activity:ScoreBoardActivity
+    val activity: ScoreBoardActivity
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val TYPE_HEADER = 0
     val TYPE_ITEM = 1
     val TYPE_RANK = 2
+    var req_pos =  0
 
 //    val db = AppDatabase.getInstance(context)
 //    val prefs: SharedPreferences = context.getSharedPreferences("boardgame", 0)
@@ -115,24 +116,29 @@ class GameScoreBoardRecyclerAdapter(
                 val round = position / personList.size
                 val idx = position % personList.size
                 holder.item.setText(boardMap[round + 1]!![idx].toString())
-
+                if (position == req_pos) {
+                    holder.item.requestFocus()
+                    holder.item.selectAll()
+                }
                 holder.item.setOnEditorActionListener { v, actionId, event ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        val round = position / personList.size
+                        val idx = position % personList.size
+                        req_pos +=1
+                        var is_append = true
                         try {
-                            val round = position / personList.size
-                            val idx = position % personList.size
                             boardMap[round + 1]!![idx] = holder.item.text.toString().toInt()
-                            if (position == boardMap.size * personList.size - 1) {
-                                boardMap[boardMap.size + 1] = IntArray(personList.size) { 0 }
 
-                            }
-                            sumlist.value = Cal_sum()
-                            holder.item.clearFocus()
                         } catch (e: NumberFormatException) {
                             holder.item.setText("0")
+                            req_pos =position
                             Toast.makeText(context, "숫자를 입력해주세요", Toast.LENGTH_SHORT).show()
-                        }finally {
-                            notifyDataSetChanged()
+                            is_append =false
+                        }
+                        sumlist.value = Cal_sum()
+                        notifyDataSetChanged()
+                        if ((position == boardMap.size * personList.size - 1) and is_append)  {
+                            boardMap[boardMap.size + 1] = IntArray(personList.size) { 0 }
                             activity.RoundAdapter!!.notifyDataSetChanged()
                         }
 
@@ -184,7 +190,7 @@ class GameScoreBoardRecyclerAdapter(
         device_width = if (personList.size == 2) {
             (device_width - dpToPx(context, 62)) / 2
         } else {
-            (device_width - dpToPx(context, 60 +1*personList.size)) / 3
+            (device_width - dpToPx(context, 60 + 1 * personList.size)) / 3
         }
         view.layoutParams.width = device_width
         view.requestLayout()
