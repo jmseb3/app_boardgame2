@@ -4,25 +4,24 @@
     android:layout_width="100dp"
     android:layout_height="40dp"
     android:background="@color/match2">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/item_person_name"
-        android:src="@drawable/line2">
 
-    </ImageView>
+    <ImageView
+        android:id="@+id/crown"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/crown"
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/item_person_name"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:fontFamily="@font/thisfont"
         android:gravity="center"
-        android:textSize="20sp"
-        android:text=""
+        android:textSize="18sp"
+        android:text="테스트"
         android:textColor="@color/match1" />
 
 

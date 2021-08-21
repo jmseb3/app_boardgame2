@@ -28,7 +28,6 @@ class GameScoreBoardRecyclerAdapter(
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val TYPE_HEADER = 0
     val TYPE_ITEM = 1
     val TYPE_RANK = 2
     var req_pos =  0
@@ -38,10 +37,6 @@ class GameScoreBoardRecyclerAdapter(
 //    val iddata = prefs.getInt("iddata", 0)
 
 
-    inner class ScoreHeaderViewHolder(binding: ItemScoreNameBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        var header = binding.itemPersonName
-    }
 
     inner class ScoreViewHolder(binding: ItemScoreInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -56,9 +51,6 @@ class GameScoreBoardRecyclerAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (type) {
-            0 -> {
-                TYPE_HEADER
-            }
             2 -> {
                 TYPE_RANK
             }
@@ -71,16 +63,6 @@ class GameScoreBoardRecyclerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
-            TYPE_HEADER -> {
-                val binding =
-                    ItemScoreNameBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                    )
-                sizeChange(binding.itemAll)
-                return ScoreHeaderViewHolder(binding)
-            }
             TYPE_RANK -> {
                 val binding =
                     ItemScoreRankBinding.inflate(
@@ -105,10 +87,6 @@ class GameScoreBoardRecyclerAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ScoreHeaderViewHolder -> {
-                holder.header.text = personList[position]
-
-            }
             is RankViewHolder -> {
                 holder.rank.text = "#" + (position + 1)
             }
@@ -153,7 +131,6 @@ class GameScoreBoardRecyclerAdapter(
 
 
     }
-
 
     private fun Cal_sum(): IntArray {
         val temp = IntArray(personList.size) { 0 }

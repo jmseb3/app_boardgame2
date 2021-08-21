@@ -7,13 +7,16 @@
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/drawable/btn_layout2.xml" value="0.38697916666666665" />
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/drawable/solid_layout.xml" value="0.38697916666666665" />
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/drawable/solid_layout2.xml" value="0.38697916666666665" />
+        <entry key="..\:/myapp/app_boardgame2/app/src/main/res/font/thisfont.xml" value="0.2484375" />
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/activity_score_board.xml" value="0.371875" />
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/dialog_add_new_person.xml" value="0.37083333333333335" />
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/fragment_game_score_board.xml" value="0.38645833333333335" />
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/fragment_game_setting.xml" value="0.38645833333333335" />
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/item_score_input.xml" value="0.325" />
-        <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/item_score_name.xml" value="0.2786458333333333" />
+        <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/item_score_name.xml" value="1.0" />
         <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/item_score_rank.xml" value="0.2786458333333333" />
+        <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/item_setting_add_header.xml" value="0.38645833333333335" />
+        <entry key="..\:/myapp/app_boardgame2/app/src/main/res/layout/item_setting_person.xml" value="0.38645833333333335" />
       </map>
     </option>
   </component>
