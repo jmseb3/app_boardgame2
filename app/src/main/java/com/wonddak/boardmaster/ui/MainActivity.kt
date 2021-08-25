@@ -99,12 +99,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.popBackStack()
             supportActionBar!!.setDisplayHomeAsUpEnabled(false)
             binding.mainactivitytitle.text = "보드게임 매니저"
-        } else if (supportFragmentManager.backStackEntryCount == 2) {
-            binding.mainactivitytitle.text = "보드게임 매니저"
-            supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-            for (i in 0..1) {
-                supportFragmentManager.popBackStack()
-            }
         }
     }
 

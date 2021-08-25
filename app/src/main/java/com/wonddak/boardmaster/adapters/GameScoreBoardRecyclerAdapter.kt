@@ -32,11 +32,6 @@ class GameScoreBoardRecyclerAdapter(
     val TYPE_RANK = 2
     var req_pos =  0
 
-//    val db = AppDatabase.getInstance(context)
-//    val prefs: SharedPreferences = context.getSharedPreferences("boardgame", 0)
-//    val iddata = prefs.getInt("iddata", 0)
-
-
 
     inner class ScoreViewHolder(binding: ItemScoreInputBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -113,11 +108,11 @@ class GameScoreBoardRecyclerAdapter(
                             Toast.makeText(context, "숫자를 입력해주세요", Toast.LENGTH_SHORT).show()
                             is_append =false
                         }
-                        sumlist.value = Cal_sum()
                         notifyDataSetChanged()
                         if ((position == boardMap.size * personList.size - 1) and is_append)  {
                             boardMap[boardMap.size + 1] = IntArray(personList.size) { 0 }
                             activity.RoundAdapter!!.notifyDataSetChanged()
+                            notifyDataSetChanged()
                         }
 
                         true

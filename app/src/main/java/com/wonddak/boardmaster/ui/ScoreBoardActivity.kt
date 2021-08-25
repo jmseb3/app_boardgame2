@@ -3,8 +3,10 @@ package com.wonddak.boardmaster.ui
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import com.wonddak.boardmaster.adapters.GameScoreBoardRecyclerAdapter
 import com.wonddak.boardmaster.adapters.GameScoreHeaderRecyclerAdapter
 import com.wonddak.boardmaster.databinding.ActivityScoreBoardBinding
 import com.wonddak.boardmaster.room.AppDatabase
+import com.wonddak.boardmaster.ui.viewmodels.ScoreBoardViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,10 +31,6 @@ class ScoreBoardActivity : AppCompatActivity() {
     var ScoreAdapter: GameScoreBoardRecyclerAdapter? = null
     var SumAdapter: GamScoreSumRecyclerAdapter? = null
     private lateinit var db: AppDatabase
-
-    var board_map: MutableMap<Int, IntArray> = mutableMapOf()
-    var sum_socre: MutableLiveData<IntArray> = MutableLiveData()
-    var maxValueIDX: MutableLiveData<List<Int>> = MutableLiveData()
 
     var personList: List<String> = mutableListOf()
 
@@ -48,43 +47,48 @@ class ScoreBoardActivity : AppCompatActivity() {
         val prefs: SharedPreferences = this.getSharedPreferences("boardgame", 0)
         var iddata = prefs.getInt("iddata", 0)
 
+        val viewModel = ViewModelProvider(this).get(ScoreBoardViewModel::class.java)
+
+
         DividerManger()
 
-        GlobalScope.launch(Dispatchers.IO) {
-            personList = db.dataDao().getPersonNameByGameId(iddata)
-            board_map[1] = IntArray(personList.size) { 0 }
-            RoundAdapter =
-                GameScoreBoardRecyclerAdapter(
-                    personList,
-                    board_map,
-                    TYPE_RANK,
-                    this@ScoreBoardActivity,
-                    sum_socre, this@ScoreBoardActivity
-                )
-            ScoreAdapter =
-                GameScoreBoardRecyclerAdapter(
-                    personList,
-                    board_map,
-                    TYPE_ITEM,
-                    this@ScoreBoardActivity,
-                    sum_socre, this@ScoreBoardActivity
-                )
-            launch(Dispatchers.Main) {
-                sum_socre.value = Cal_sum()
+        binding.test.setOnClickListener {
+            Log.d("datas",""+viewModel.board_map)
+        }
 
+        GlobalScope.launch(Dispatchers.IO) {
+            personList = viewModel.getPerson()
+            viewModel.startBoardmap()
+            RoundAdapter = GameScoreBoardRecyclerAdapter(
+                personList,
+                viewModel.board_map,
+                TYPE_RANK,
+                this@ScoreBoardActivity,
+                viewModel.sum_socre, this@ScoreBoardActivity
+            )
+            ScoreAdapter = GameScoreBoardRecyclerAdapter(
+                personList,
+                viewModel.board_map,
+                TYPE_ITEM,
+                this@ScoreBoardActivity,
+                viewModel.sum_socre, this@ScoreBoardActivity
+            )
+            launch(Dispatchers.Main) {
+                viewModel.updateSumScore()
                 binding.gameRecyclerRound.adapter = RoundAdapter
                 val gridLayoutManager = GridLayoutManager(this@ScoreBoardActivity, personList.size)
                 binding.gameRecyclerScore.layoutManager = gridLayoutManager
                 binding.gameRecyclerScore.adapter = ScoreAdapter
             }
         }
-        maxValueIDX.value = mutableListOf()
-        maxValueIDX.observe(this, Observer {
+
+        viewModel.maxValueIDX.observe(this, Observer {
             HeaderAdapter = GameScoreHeaderRecyclerAdapter(personList, this, it)
             binding.gameRecyclerHeader.adapter = HeaderAdapter
         })
 
-        sum_socre.observe(this, Observer {
+        viewModel.sum_socre.observe(this, Observer {
+            Log.d("datas", "" + it)
             SumAdapter = GamScoreSumRecyclerAdapter(it, this@ScoreBoardActivity)
             binding.gameRecyclerSum.adapter = SumAdapter
             val max_val = it.maxOrNull() ?: 0
@@ -94,22 +98,12 @@ class ScoreBoardActivity : AppCompatActivity() {
                     temp.add(x)
                 }
             }
-            maxValueIDX.value = temp
+            viewModel.updateMaxValueIdx(temp)
 
         })
 
         ScrollManger()
 
-    }
-
-    private fun Cal_sum(): IntArray {
-        val temp = IntArray(personList.size) { 0 }
-        for (idx in personList.indices) {
-            for (row in board_map.values) {
-                temp[idx] += row[idx]
-            }
-        }
-        return temp
     }
 
 

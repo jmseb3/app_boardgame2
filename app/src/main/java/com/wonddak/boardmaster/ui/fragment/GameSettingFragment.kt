@@ -39,6 +39,7 @@ class GameSettingFragment : Fragment() {
     val existpersonlist by lazy { requireArguments().getStringArrayList("exist") }
     var addpersonlist = mutableListOf<String>()
     val title by lazy { requireArguments().getString("title") }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -114,7 +115,7 @@ class GameSettingFragment : Fragment() {
                 else -> {
                     GlobalScope.launch(Dispatchers.IO) {
                         val temp_id = db.dataDao()
-                            .insertGame(StartGame(null, binding.settingInputTitle.text.toString()))
+                            .insertGame(StartGame(null, binding.settingInputTitle.text.toString(),""))
                             .toInt()
                         editor.putInt("iddata", temp_id)
                         editor.commit()

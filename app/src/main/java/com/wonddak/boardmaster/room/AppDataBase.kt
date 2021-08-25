@@ -7,11 +7,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-        entities = [StartGame::class, PersonList::class],
-        version = 1,
-        exportSchema = false
+    entities = [StartGame::class, PersonList::class],
+    version = 1,
+    exportSchema = false
 )
-@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun dataDao(): DataDao
 
@@ -20,9 +19,9 @@ abstract class AppDatabase : RoomDatabase() {
         fun getInstance(context: Context): AppDatabase {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
-                        context,
-                        AppDatabase::class.java,
-                        "game.db"
+                    context,
+                    AppDatabase::class.java,
+                    "games.db"
                 ).build()
             }
             return INSTANCE as AppDatabase
