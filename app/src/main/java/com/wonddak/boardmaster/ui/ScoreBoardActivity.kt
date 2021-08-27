@@ -4,7 +4,11 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
+import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -21,7 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
-import java.util.stream.IntStream
+
 
 class ScoreBoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScoreBoardBinding
@@ -31,6 +35,8 @@ class ScoreBoardActivity : AppCompatActivity() {
     var ScoreAdapter: GameScoreBoardRecyclerAdapter? = null
     var SumAdapter: GamScoreSumRecyclerAdapter? = null
     private lateinit var db: AppDatabase
+    private var isFabOpen = false
+
 
     var personList: List<String> = mutableListOf()
 
@@ -42,6 +48,8 @@ class ScoreBoardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityScoreBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbarMain)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         db = AppDatabase.getInstance(this)
         val prefs: SharedPreferences = this.getSharedPreferences("boardgame", 0)
@@ -49,12 +57,9 @@ class ScoreBoardActivity : AppCompatActivity() {
 
         val viewModel = ViewModelProvider(this).get(ScoreBoardViewModel::class.java)
 
+        dividerManger()
+        scrollManger()
 
-        DividerManger()
-
-        binding.test.setOnClickListener {
-            Log.d("datas",""+viewModel.board_map)
-        }
 
         GlobalScope.launch(Dispatchers.IO) {
             personList = viewModel.getPerson()
@@ -64,17 +69,17 @@ class ScoreBoardActivity : AppCompatActivity() {
                 viewModel.board_map,
                 TYPE_RANK,
                 this@ScoreBoardActivity,
-                viewModel.sum_socre, this@ScoreBoardActivity
+                this@ScoreBoardActivity,
+                viewModel
             )
             ScoreAdapter = GameScoreBoardRecyclerAdapter(
                 personList,
                 viewModel.board_map,
                 TYPE_ITEM,
-                this@ScoreBoardActivity,
-                viewModel.sum_socre, this@ScoreBoardActivity
+                this@ScoreBoardActivity, this@ScoreBoardActivity, viewModel
             )
+            viewModel.updateSumScore()
             launch(Dispatchers.Main) {
-                viewModel.updateSumScore()
                 binding.gameRecyclerRound.adapter = RoundAdapter
                 val gridLayoutManager = GridLayoutManager(this@ScoreBoardActivity, personList.size)
                 binding.gameRecyclerScore.layoutManager = gridLayoutManager
@@ -102,17 +107,53 @@ class ScoreBoardActivity : AppCompatActivity() {
 
         })
 
-        ScrollManger()
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_board, menu)
+        return true
+    }
 
-    private fun ScrollManger() {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.action_settings -> {
+                val popMenu = PopupMenu(this, binding.toolbarMain,Gravity.RIGHT)
+                popMenu.menuInflater.inflate(R.menu.menu_popup, popMenu.menu)
+                popMenu.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.nav_graph -> {
+                            Toast.makeText(this, "graph", Toast.LENGTH_SHORT).show()
+                        }
+                        R.id.nav_list -> {
+                            Toast.makeText(this, "list", Toast.LENGTH_SHORT).show()
+                        }
+                        R.id.nav_main -> {
+                            Toast.makeText(this, "main", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    true
+                }
+                popMenu.show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        overridePendingTransition(0, 0)
+        super.onBackPressed()
+    }
+
+
+    private fun scrollManger() {
         val headerScroll = binding.headerScroll
         val roundScroll = binding.roundScroll
         val scoreHorizontalScroll = binding.gameScore
         val scoreVerticalScroll = binding.gameScoreVerticalScroll
         val scrollSum = binding.sumScroll
+
         headerScroll.setOnScrollChangeListener { _, scrollX, scrollY, _, _ ->
             scoreHorizontalScroll.scrollTo(scrollX, scrollY)
             scrollSum.scrollTo(scrollX, scrollY)
@@ -135,7 +176,7 @@ class ScoreBoardActivity : AppCompatActivity() {
         }
     }
 
-    private fun DividerManger() {
+    private fun dividerManger() {
         val divider_Vertical = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
         val divider_Horizontal = DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL)
         val grid_divider_Vertical = DividerItemDecoration(this, GridLayoutManager.VERTICAL)

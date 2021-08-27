@@ -38,4 +38,7 @@ data class StartGameWithPersonList(
 )
 
 
-
+data class ScoreBoard(
+    val round: Int,
+    val scorelist: IntArray
+)

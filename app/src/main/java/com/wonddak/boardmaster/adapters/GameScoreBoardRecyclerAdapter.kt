@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.wonddak.boardmaster.databinding.ItemScoreInputBinding
 import com.wonddak.boardmaster.databinding.ItemScoreNameBinding
 import com.wonddak.boardmaster.databinding.ItemScoreRankBinding
 import com.wonddak.boardmaster.ui.ScoreBoardActivity
+import com.wonddak.boardmaster.ui.viewmodels.ScoreBoardViewModel
 import java.lang.NumberFormatException
 
 
@@ -23,14 +25,14 @@ class GameScoreBoardRecyclerAdapter(
     var boardMap: MutableMap<Int, IntArray>,
     val type: Int,
     val context: Context,
-    val sumlist: MutableLiveData<IntArray>,
-    val activity: ScoreBoardActivity
+    val activity: ScoreBoardActivity,
+    val viewModel: ScoreBoardViewModel
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     val TYPE_ITEM = 1
     val TYPE_RANK = 2
-    var req_pos =  0
+    var req_pos = 0
 
 
     inner class ScoreViewHolder(binding: ItemScoreInputBinding) :
@@ -97,23 +99,24 @@ class GameScoreBoardRecyclerAdapter(
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         val round = position / personList.size
                         val idx = position % personList.size
-                        req_pos +=1
+                        req_pos = position + 1
                         var is_append = true
                         try {
                             boardMap[round + 1]!![idx] = holder.item.text.toString().toInt()
 
                         } catch (e: NumberFormatException) {
                             holder.item.setText("0")
-                            req_pos =position
+                            req_pos = position
                             Toast.makeText(context, "숫자를 입력해주세요", Toast.LENGTH_SHORT).show()
-                            is_append =false
+                            is_append = false
                         }
                         notifyDataSetChanged()
-                        if ((position == boardMap.size * personList.size - 1) and is_append)  {
+                        if ((position == boardMap.size * personList.size - 1) and is_append) {
                             boardMap[boardMap.size + 1] = IntArray(personList.size) { 0 }
                             activity.RoundAdapter!!.notifyDataSetChanged()
-                            notifyDataSetChanged()
                         }
+                        viewModel.updateSumScore()
+                        viewModel.updateBoardmap(boardMap)
 
                         true
                     }

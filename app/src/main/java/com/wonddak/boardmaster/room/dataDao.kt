@@ -22,6 +22,9 @@ interface DataDao {
     @Query("SELECT scoreList FROM StartGame WHERE gameId=:gameId")
     fun getGameScoreById(gameId: Int): String
 
+    @Query("UPDATE StartGame set scoreList= :scorelist WHERE gameId=:gameId")
+    fun UpdateGameScoreById(gameId: Int, scorelist: String)
+
     //사람관련
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPerson(personname: PersonList): Long

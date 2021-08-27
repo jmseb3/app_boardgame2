@@ -1,6 +1,7 @@
 package com.wonddak.boardmaster.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
@@ -75,7 +76,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnContinueGameMainFrag.setOnClickListener {
-
+            val intent = Intent(this,ScoreBoardActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0,0)
         }
     }
 

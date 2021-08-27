@@ -2,6 +2,7 @@ package com.wonddak.boardmaster.ui.viewmodels
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +12,8 @@ import com.wonddak.boardmaster.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.reflect.typeOf
 
 class ScoreBoardViewModel(application: Application) : AndroidViewModel(application) {
     val db = AppDatabase.getInstance(application)
@@ -20,6 +23,7 @@ class ScoreBoardViewModel(application: Application) : AndroidViewModel(applicati
     var board_map: MutableMap<Int, IntArray> = mutableMapOf()
     var sum_socre: MutableLiveData<IntArray> = MutableLiveData()
     var maxValueIDX: MutableLiveData<List<Int>> = MutableLiveData()
+
     init {
         maxValueIDX.value = mutableListOf()
     }
@@ -29,17 +33,27 @@ class ScoreBoardViewModel(application: Application) : AndroidViewModel(applicati
         return db.dataDao().getPersonNameByGameId(iddata)
     }
 
-    fun startBoardmap(){
+    fun startBoardmap() {
         GlobalScope.launch(Dispatchers.IO) {
             val temp = db.dataDao().getGameScoreById(iddata)
             if (temp == "") {
                 board_map[1] = IntArray(getPerson().size) { 0 }
             } else {
-                board_map = stringtomap(temp)
+                val temp2 = stringtomap(temp)
+                for ((x, row) in temp2.entries) {
+                    board_map[x] = toIntArray(row)!!
+                }
                 updateSumScore()
             }
         }
 
+    }
+
+    fun updateBoardmap(map: Map<Int, IntArray>) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val temp = mapToString(map)
+            db.dataDao().UpdateGameScoreById(iddata, temp)
+        }
     }
 
     fun updateMaxValueIdx(value: List<Int>) {
@@ -61,12 +75,18 @@ class ScoreBoardViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun stringtomap(string: String): MutableMap<Int, IntArray> {
-        return Gson().fromJson(string, object : TypeToken<Map<Int, IntArray>>() {}.type)
+    fun stringtomap(string: String): MutableMap<Int, List<Int>> {
+        return Gson().fromJson(string, object : TypeToken<Map<Int, List<Int>>>() {}.type)
     }
 
     fun mapToString(map: Map<Int, IntArray>): String {
         return Gson().toJson(map)
+    }
+
+    fun toIntArray(list: List<Int>): IntArray? {
+        val ret = IntArray(list.size)
+        for (i in ret.indices) ret[i] = list[i]
+        return ret
     }
 
 
