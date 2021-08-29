@@ -1,6 +1,7 @@
 package com.wonddak.boardmaster.ui
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Point
@@ -20,12 +21,15 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.ArrayList
 import android.util.DisplayMetrics
+import androidx.lifecycle.ViewModelProvider
+import com.wonddak.boardmaster.ui.viewmodels.ScoreBoardViewModel
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: AppDatabase
     private var backKeyPressedTime: Long = 0
+    var context: Context? = null
     var live_Id: MutableLiveData<Int> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         db = AppDatabase.getInstance(this)
         setSupportActionBar(binding.toolbarMain)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
+        context = this
 
         val prefs: SharedPreferences = this.getSharedPreferences("boardgame", 0)
         var iddata = prefs.getInt("iddata", 0)

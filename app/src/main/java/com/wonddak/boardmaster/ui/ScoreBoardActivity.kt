@@ -1,5 +1,7 @@
 package com.wonddak.boardmaster.ui
 
+import android.app.Dialog
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -44,6 +46,7 @@ class ScoreBoardActivity : AppCompatActivity() {
     val TYPE_ITEM = 1
     val TYPE_RANK = 2
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScoreBoardBinding.inflate(layoutInflater)
@@ -52,14 +55,10 @@ class ScoreBoardActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         db = AppDatabase.getInstance(this)
-        val prefs: SharedPreferences = this.getSharedPreferences("boardgame", 0)
-        var iddata = prefs.getInt("iddata", 0)
-
         val viewModel = ViewModelProvider(this).get(ScoreBoardViewModel::class.java)
 
         dividerManger()
         scrollManger()
-
 
         GlobalScope.launch(Dispatchers.IO) {
             personList = viewModel.getPerson()
@@ -137,13 +136,16 @@ class ScoreBoardActivity : AppCompatActivity() {
                 }
                 popMenu.show()
             }
+            R.id.action_finish ->{
+                GameDialog(this,this).addEndDialog()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
+        this.finish()
         overridePendingTransition(0, 0)
-        super.onBackPressed()
     }
 
 

@@ -9,15 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.wonddak.boardmaster.databinding.ItemScoreInputBinding
-import com.wonddak.boardmaster.databinding.ItemScoreNameBinding
 import com.wonddak.boardmaster.databinding.ItemScoreRankBinding
 import com.wonddak.boardmaster.ui.ScoreBoardActivity
 import com.wonddak.boardmaster.ui.viewmodels.ScoreBoardViewModel
 import java.lang.NumberFormatException
+import kotlin.math.round
 
 
 class GameScoreBoardRecyclerAdapter(
@@ -32,7 +30,7 @@ class GameScoreBoardRecyclerAdapter(
 
     val TYPE_ITEM = 1
     val TYPE_RANK = 2
-    var req_pos = 0
+    var req_pos = -1
 
 
     inner class ScoreViewHolder(binding: ItemScoreInputBinding) :
@@ -43,6 +41,7 @@ class GameScoreBoardRecyclerAdapter(
     inner class RankViewHolder(binding: ItemScoreRankBinding) :
         RecyclerView.ViewHolder(binding.root) {
         var rank = binding.itemRank
+        val all_rank = binding.rankAll
     }
 
 
@@ -86,6 +85,13 @@ class GameScoreBoardRecyclerAdapter(
         when (holder) {
             is RankViewHolder -> {
                 holder.rank.text = "#" + (position + 1)
+                holder.all_rank.setOnClickListener {
+                    boardMap[position + 1] = IntArray(personList.size) { 0 }
+                    activity.ScoreAdapter!!.notifyDataSetChanged()
+                    viewModel.updateSumScore()
+                    viewModel.updateBoardmap(boardMap)
+                    Toast.makeText(context,""+(position+1)+"라운드의 점수를 초기화 했습니다.",Toast.LENGTH_SHORT).show()
+                }
             }
             is ScoreViewHolder -> {
                 val round = position / personList.size

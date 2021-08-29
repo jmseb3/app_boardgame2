@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_all"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="3"
+    android:background="@color/match2"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/result_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="@font/thisfont"
+        android:gravity="center"
+        android:text="1등"
+        android:textColor="@color/match1" />
+
+    <TextView
+        android:id="@+id/result_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="@font/thisfont"
+        android:gravity="center"
+        android:text="이름입니다"
+        android:textColor="@color/match1" />
+
+    <TextView
+        android:id="@+id/result_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:fontFamily="@font/thisfont"
+        android:text=" 0 점"
+        android:textColor="@color/match1" />
+
+</LinearLayout>

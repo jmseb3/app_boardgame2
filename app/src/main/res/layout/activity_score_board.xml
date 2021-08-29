@@ -7,6 +7,8 @@
     android:background="@color/match1"
     tools:context=".ui.ScoreBoardActivity">
 
+
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
@@ -186,14 +188,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="58dp" />
+        app:layout_constraintGuide_begin="60dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="98dp" />
+        app:layout_constraintGuide_begin="100dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/underline"
@@ -229,9 +231,5 @@
         app:layout_constraintStart_toEndOf="@id/leftline2"
         app:layout_constraintTop_toTopOf="@id/header_scroll"></View>
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:constraint_referenced_ids="fab_btn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
