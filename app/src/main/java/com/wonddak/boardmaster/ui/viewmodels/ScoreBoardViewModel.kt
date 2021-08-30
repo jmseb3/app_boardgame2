@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.wonddak.boardmaster.room.AppDatabase
+import com.wonddak.boardmaster.room.StartGame
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ class ScoreBoardViewModel(application: Application) : AndroidViewModel(applicati
     var board_map: MutableMap<Int, IntArray> = mutableMapOf()
     var sum_socre: MutableLiveData<IntArray> = MutableLiveData()
     var maxValueIDX: MutableLiveData<List<Int>> = MutableLiveData()
+    var wait = true
 
     init {
         maxValueIDX.value = mutableListOf()
@@ -32,6 +34,9 @@ class ScoreBoardViewModel(application: Application) : AndroidViewModel(applicati
     fun getPerson(): List<String> {
         return db.dataDao().getPersonNameByGameId(iddata)
     }
+    fun getGame(): String {
+        return db.dataDao().getGameNameById(iddata)
+    }
 
     fun startBoardmap() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -39,6 +44,7 @@ class ScoreBoardViewModel(application: Application) : AndroidViewModel(applicati
             if (temp == "") {
                 board_map[1] = IntArray(getPerson().size) { 0 }
             } else {
+                wait = false
                 val temp2 = stringtomap(temp)
                 for ((x, row) in temp2.entries) {
                     board_map[x] = toIntArray(row)!!

@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_all"
     android:layout_width="100dp"
     android:layout_height="40dp"
     android:background="@color/match2">
 
+
     <ImageView
         android:id="@+id/crown"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/crown"
-        android:visibility="invisible"/>
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_laurel_wreath_icon"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/item_person_name"
@@ -20,9 +29,13 @@
         android:layout_centerInParent="true"
         android:fontFamily="@font/thisfont"
         android:gravity="center"
-        android:textSize="18sp"
         android:text="테스트"
-        android:textColor="@color/match1" />
+        android:textColor="@color/match1"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

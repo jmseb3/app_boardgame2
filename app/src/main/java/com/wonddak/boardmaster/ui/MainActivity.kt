@@ -21,7 +21,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.ArrayList
 import android.util.DisplayMetrics
+import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import com.wonddak.boardmaster.ui.fragment.GameListFragment
 import com.wonddak.boardmaster.ui.viewmodels.ScoreBoardViewModel
 
 
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private var backKeyPressedTime: Long = 0
     var context: Context? = null
     var live_Id: MutableLiveData<Int> = MutableLiveData()
+    var maintitle: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarMain)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         context = this
+        maintitle = binding.mainactivitytitle
 
         val prefs: SharedPreferences = this.getSharedPreferences("boardgame", 0)
         var iddata = prefs.getInt("iddata", 0)
@@ -61,14 +65,14 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-
-
         binding.btnStartNewGameMainFrag.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
                 val temp = db.dataDao().getPersonName().toSet().toMutableList()
                 launch(Dispatchers.Main) {
+                    binding.mainactivitytitle.text = "게임 설정"
                     supportFragmentManager
                         .beginTransaction()
+                        .addToBackStack(null)
                         .add(R.id.frag_area, GameSettingFragment().apply {
                             arguments = Bundle().apply {
                                 putStringArrayList("exist", temp as ArrayList<String>)
@@ -81,9 +85,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnContinueGameMainFrag.setOnClickListener {
-            val intent = Intent(this,ScoreBoardActivity::class.java)
+            val intent = Intent(this, ScoreBoardActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(0,0)
+            overridePendingTransition(0, 0)
+        }
+
+        binding.btnGameList.setOnClickListener {
+            supportFragmentManager
+                .beginTransaction()
+                .addToBackStack(null)
+                .add(R.id.frag_area, GameListFragment())
+                .commit()
         }
     }
 
@@ -104,9 +116,8 @@ class MainActivity : AppCompatActivity() {
             }
 
         } else if (supportFragmentManager.backStackEntryCount == 1) {
-            supportFragmentManager.popBackStack()
-            supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-            binding.mainactivitytitle.text = "보드게임 매니저"
+            supportFragmentManager.popBackStackImmediate()
+            maintitle!!.text = resources.getString(R.string.app_name)
         }
     }
 

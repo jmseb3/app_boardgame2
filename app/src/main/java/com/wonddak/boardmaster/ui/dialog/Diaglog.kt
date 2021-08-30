@@ -4,16 +4,21 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.wonddak.boardmaster.adapters.GameResultRecyclerAdapter
 import com.wonddak.boardmaster.adapters.GameSettingRecyclerAdapter
 import com.wonddak.boardmaster.databinding.DialogAddNewPersonBinding
 import com.wonddak.boardmaster.databinding.DialogGameEndBinding
 import com.wonddak.boardmaster.databinding.DialogGameResultBinding
 import com.wonddak.boardmaster.room.AppDatabase
 import com.wonddak.boardmaster.ui.viewmodels.ScoreBoardViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class PersonAddDialog(
@@ -95,6 +100,11 @@ class GameDialog(
 
     }
 
+    data class GameResult(
+        val score: Int,
+        val name: String
+    )
+
     fun addResultDialog() {
         val binding = DialogGameResultBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
@@ -105,13 +115,30 @@ class GameDialog(
         dialog.window!!.attributes = params as android.view.WindowManager.LayoutParams
         dialog.show()
 
+        GlobalScope.launch(Dispatchers.IO) {
+            var personlist = viewModel.getPerson()
+            var sumlist = viewModel.sum_socre.value
+            var datalist = mutableListOf<GameResult>()
+            for (x in personlist.indices){
+                datalist.add(GameResult(sumlist!![x],personlist[x]))
+            }
+            datalist.sortByDescending { it.score }
+
+
+            GlobalScope.launch(Dispatchers.Main) {
+                binding.resultRecycler.adapter = GameResultRecyclerAdapter(datalist, context)
+                Log.d("datas",""+datalist)
+            }
+        }
+
+
+
         binding.ok.setOnClickListener {
             dialog.dismiss()
-            activity.overridePendingTransition(0,0)
+            activity.overridePendingTransition(0, 0)
             activity.startActivity(Intent(activity, MainActivity::class.java))
             activity.finish()
-            activity.overridePendingTransition(0,0)
-
+            activity.overridePendingTransition(0, 0)
         }
 
     }

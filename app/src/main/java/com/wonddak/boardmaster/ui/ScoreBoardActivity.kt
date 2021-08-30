@@ -1,8 +1,5 @@
 package com.wonddak.boardmaster.ui
 
-import android.app.Dialog
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +14,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.wonddak.boardmaster.R
-import com.wonddak.boardmaster.adapters.GamScoreSumRecyclerAdapter
+import com.wonddak.boardmaster.adapters.GameScoreSumRecyclerAdapter
 import com.wonddak.boardmaster.adapters.GameScoreBoardRecyclerAdapter
 import com.wonddak.boardmaster.adapters.GameScoreHeaderRecyclerAdapter
 import com.wonddak.boardmaster.databinding.ActivityScoreBoardBinding
@@ -35,10 +32,9 @@ class ScoreBoardActivity : AppCompatActivity() {
     var HeaderAdapter: GameScoreHeaderRecyclerAdapter? = null
     var RoundAdapter: GameScoreBoardRecyclerAdapter? = null
     var ScoreAdapter: GameScoreBoardRecyclerAdapter? = null
-    var SumAdapter: GamScoreSumRecyclerAdapter? = null
+    var SumAdapter: GameScoreSumRecyclerAdapter? = null
     private lateinit var db: AppDatabase
     private var isFabOpen = false
-
 
     var personList: List<String> = mutableListOf()
 
@@ -62,6 +58,7 @@ class ScoreBoardActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.IO) {
             personList = viewModel.getPerson()
+            val title = viewModel.getGame()
             viewModel.startBoardmap()
             RoundAdapter = GameScoreBoardRecyclerAdapter(
                 personList,
@@ -79,6 +76,7 @@ class ScoreBoardActivity : AppCompatActivity() {
             )
             viewModel.updateSumScore()
             launch(Dispatchers.Main) {
+                binding.maintitle.text = "%s 게임".format(title)
                 binding.gameRecyclerRound.adapter = RoundAdapter
                 val gridLayoutManager = GridLayoutManager(this@ScoreBoardActivity, personList.size)
                 binding.gameRecyclerScore.layoutManager = gridLayoutManager
@@ -87,13 +85,13 @@ class ScoreBoardActivity : AppCompatActivity() {
         }
 
         viewModel.maxValueIDX.observe(this, Observer {
-            HeaderAdapter = GameScoreHeaderRecyclerAdapter(personList, this, it)
+            HeaderAdapter = GameScoreHeaderRecyclerAdapter(personList, this, it, viewModel.wait)
             binding.gameRecyclerHeader.adapter = HeaderAdapter
         })
 
         viewModel.sum_socre.observe(this, Observer {
             Log.d("datas", "" + it)
-            SumAdapter = GamScoreSumRecyclerAdapter(it, this@ScoreBoardActivity)
+            SumAdapter = GameScoreSumRecyclerAdapter(it, this@ScoreBoardActivity)
             binding.gameRecyclerSum.adapter = SumAdapter
             val max_val = it.maxOrNull() ?: 0
             val temp = mutableListOf<Int>()
@@ -118,7 +116,7 @@ class ScoreBoardActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.action_settings -> {
-                val popMenu = PopupMenu(this, binding.toolbarMain,Gravity.RIGHT)
+                val popMenu = PopupMenu(this, binding.toolbarMain, Gravity.RIGHT)
                 popMenu.menuInflater.inflate(R.menu.menu_popup, popMenu.menu)
                 popMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
@@ -136,8 +134,8 @@ class ScoreBoardActivity : AppCompatActivity() {
                 }
                 popMenu.show()
             }
-            R.id.action_finish ->{
-                GameDialog(this,this).addEndDialog()
+            R.id.action_finish -> {
+                GameDialog(this, this).addEndDialog()
             }
         }
         return super.onOptionsItemSelected(item)

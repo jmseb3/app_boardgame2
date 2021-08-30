@@ -10,11 +10,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.wonddak.boardmaster.databinding.ItemScoreNameBinding
 
-class GamScoreSumRecyclerAdapter(
+class GameScoreSumRecyclerAdapter(
     val sumlist: IntArray,
     val context: Context
 
-) : RecyclerView.Adapter<GamScoreSumRecyclerAdapter.SumViewHolder>() {
+) : RecyclerView.Adapter<GameScoreSumRecyclerAdapter.SumViewHolder>() {
 
     inner class SumViewHolder(binding: ItemScoreNameBinding) :
         RecyclerView.ViewHolder(binding.root) {

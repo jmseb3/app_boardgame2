@@ -90,7 +90,11 @@ class GameScoreBoardRecyclerAdapter(
                     activity.ScoreAdapter!!.notifyDataSetChanged()
                     viewModel.updateSumScore()
                     viewModel.updateBoardmap(boardMap)
-                    Toast.makeText(context,""+(position+1)+"라운드의 점수를 초기화 했습니다.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "" + (position + 1) + "라운드의 점수를 초기화 했습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             is ScoreViewHolder -> {
@@ -103,6 +107,7 @@ class GameScoreBoardRecyclerAdapter(
                 }
                 holder.item.setOnEditorActionListener { v, actionId, event ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        viewModel.wait = false
                         val round = position / personList.size
                         val idx = position % personList.size
                         req_pos = position + 1

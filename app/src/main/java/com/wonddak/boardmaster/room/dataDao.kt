@@ -22,6 +22,7 @@ interface DataDao {
     @Query("SELECT scoreList FROM StartGame WHERE gameId=:gameId")
     fun getGameScoreById(gameId: Int): String
 
+
     @Query("UPDATE StartGame set scoreList= :scorelist WHERE gameId=:gameId")
     fun UpdateGameScoreById(gameId: Int, scorelist: String)
 
@@ -43,6 +44,10 @@ interface DataDao {
     @Transaction
     @Query("SELECT * FROM StartGame")
     fun getGameNameAndPerson(): List<StartGameWithPersonList>
+
+    @Transaction
+    @Query("SELECT * FROM StartGame")
+    fun getLiveGameNameAndPerson(): LiveData<List<StartGameWithPersonList>>
 
     @Query("SELECT * FROM StartGame WHERE gameId=:gameId")
     fun getGameNameAndPersonNByUd(gameId: Int): List<StartGameWithPersonList>

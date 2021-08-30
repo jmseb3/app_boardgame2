@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
 import androidx.recyclerview.widget.ItemTouchHelper.UP
@@ -46,6 +47,7 @@ class GameSettingFragment : Fragment() {
     ): View? {
         binding = FragmentGameSettingBinding.inflate(inflater, container, false)
         db = AppDatabase.getInstance(requireContext())
+        mainActivity!!.maintitle!!.text = "게임 설정"
 
         val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(UP + DOWN, 0) {
             override fun onMove(
@@ -68,6 +70,7 @@ class GameSettingFragment : Fragment() {
         val editor = prefs.edit()
 
         existpersonlist as MutableList<String>
+
 
         if (existpersonlist!!.size == 0) {
             changeVisibility(binding.existHeader)
@@ -132,10 +135,7 @@ class GameSettingFragment : Fragment() {
                             startActivity(intent)
                             mainActivity!!.overridePendingTransition(0,0)
                             requireActivity().supportFragmentManager
-                                .beginTransaction()
-                                .remove(this@GameSettingFragment)
-                                .commit()
-
+                                .popBackStack()
                         }
                     }
                 }

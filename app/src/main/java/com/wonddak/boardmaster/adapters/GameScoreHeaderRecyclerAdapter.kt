@@ -25,7 +25,8 @@ import java.lang.NumberFormatException
 class GameScoreHeaderRecyclerAdapter(
     val personList: List<String>,
     val context: Context,
-    val maxValueIDX: List<Int>
+    val maxValueIDX: List<Int>,
+    val wait :Boolean
 
 ) : RecyclerView.Adapter<GameScoreHeaderRecyclerAdapter.ScoreHeaderViewHolder>() {
 
@@ -44,10 +45,14 @@ class GameScoreHeaderRecyclerAdapter(
 
     override fun onBindViewHolder(holder: ScoreHeaderViewHolder, position: Int) {
         holder.header.text = personList[position]
-        if (position in maxValueIDX) {
-            holder.crown.visibility = View.VISIBLE
-        } else {
+        if (wait) {
             holder.crown.visibility = View.INVISIBLE
+        } else {
+            if (position in maxValueIDX) {
+                holder.crown.visibility = View.VISIBLE
+            } else {
+                holder.crown.visibility = View.INVISIBLE
+            }
         }
 
 
