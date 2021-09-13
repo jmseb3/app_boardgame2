@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.wonddak.boardmaster.adapters.GameResultRecyclerAdapter
 import com.wonddak.boardmaster.adapters.GameSettingRecyclerAdapter
 import com.wonddak.boardmaster.databinding.DialogAddNewPersonBinding
@@ -77,7 +78,7 @@ class GameDialog(
     val prefs: SharedPreferences = context.getSharedPreferences("boardgame", 0)
     val editor = prefs.edit()
 
-    fun addEndDialog() {
+    fun addEndDialog(mInterstitialAd: InterstitialAd?,activitys: ScoreBoardActivity) {
         val binding = DialogGameEndBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
 
@@ -91,7 +92,7 @@ class GameDialog(
             dialog.dismiss()
             editor.putInt("iddata", 0)
             editor.commit()
-            addResultDialog()
+            addResultDialog(mInterstitialAd,activitys)
         }
 
         binding.cancel.setOnClickListener {
@@ -105,7 +106,7 @@ class GameDialog(
         val name: String
     )
 
-    fun addResultDialog() {
+    fun addResultDialog(mInterstitialAd: InterstitialAd?,activitys: ScoreBoardActivity) {
         val binding = DialogGameResultBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
 
@@ -119,15 +120,15 @@ class GameDialog(
             var personlist = viewModel.getPerson()
             var sumlist = viewModel.sum_socre.value
             var datalist = mutableListOf<GameResult>()
-            for (x in personlist.indices){
-                datalist.add(GameResult(sumlist!![x],personlist[x]))
+            for (x in personlist.indices) {
+                datalist.add(GameResult(sumlist!![x], personlist[x]))
             }
             datalist.sortByDescending { it.score }
 
 
             GlobalScope.launch(Dispatchers.Main) {
                 binding.resultRecycler.adapter = GameResultRecyclerAdapter(datalist, context)
-                Log.d("datas",""+datalist)
+                Log.d("datas", "" + datalist)
             }
         }
 
@@ -139,6 +140,7 @@ class GameDialog(
             activity.startActivity(Intent(activity, MainActivity::class.java))
             activity.finish()
             activity.overridePendingTransition(0, 0)
+            mInterstitialAd?.show(activitys)
         }
 
     }

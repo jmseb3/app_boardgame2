@@ -8,7 +8,6 @@
     tools:context=".ui.ScoreBoardActivity">
 
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
@@ -44,8 +43,7 @@
         app:layout_constraintBottom_toBottomOf="@id/underline"
         app:layout_constraintEnd_toStartOf="@id/rightline"
         app:layout_constraintStart_toEndOf="@id/leftline"
-        app:layout_constraintTop_toTopOf="@id/topline"></View>
-
+        app:layout_constraintTop_toBottomOf="@id/sub_item"></View>
 
     <HorizontalScrollView
         android:id="@+id/header_scroll"
@@ -55,7 +53,7 @@
         app:layout_constraintBottom_toTopOf="@id/game_score"
         app:layout_constraintEnd_toEndOf="@id/rightline"
         app:layout_constraintStart_toStartOf="@id/leftline2"
-        app:layout_constraintTop_toTopOf="@id/topline">
+        app:layout_constraintTop_toBottomOf="@id/sub_item">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -80,7 +78,7 @@
         app:layout_constraintBottom_toTopOf="@id/sum_scroll"
         app:layout_constraintEnd_toStartOf="@id/game_score"
         app:layout_constraintStart_toStartOf="@id/leftline"
-        app:layout_constraintTop_toTopOf="@id/topline2">
+        app:layout_constraintTop_toBottomOf="@id/header_scroll">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -209,10 +207,10 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@color/match1"
-        app:layout_constraintBottom_toBottomOf="@id/topline2"
+        app:layout_constraintBottom_toBottomOf="@id/header_scroll"
         app:layout_constraintEnd_toStartOf="@id/rightline"
         app:layout_constraintStart_toEndOf="@id/leftline"
-        app:layout_constraintTop_toTopOf="@id/topline2"></View>
+        app:layout_constraintTop_toBottomOf="@id/header_scroll"></View>
 
     <View
         android:layout_width="0dp"
@@ -231,6 +229,16 @@
         app:layout_constraintEnd_toStartOf="@id/leftline2"
         app:layout_constraintStart_toEndOf="@id/leftline2"
         app:layout_constraintTop_toTopOf="@id/header_scroll"></View>
+
+    <FrameLayout
+        android:id="@+id/sub_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/match1"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topline" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

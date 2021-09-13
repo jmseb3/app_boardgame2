@@ -1,10 +1,8 @@
 package com.wonddak.boardmaster.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -20,17 +18,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.ArrayList
-import android.util.DisplayMetrics
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.wonddak.boardmaster.ui.fragment.GameListFragment
-import com.wonddak.boardmaster.ui.viewmodels.ScoreBoardViewModel
+import com.google.android.gms.ads.MobileAds
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: AppDatabase
     private var backKeyPressedTime: Long = 0
+    lateinit var mAdView : AdView
     var context: Context? = null
     var live_Id: MutableLiveData<Int> = MutableLiveData()
     var maintitle: TextView? = null
@@ -38,12 +37,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        mAdView  = binding.adView
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
         setContentView(binding.root)
         db = AppDatabase.getInstance(this)
         setSupportActionBar(binding.toolbarMain)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         context = this
         maintitle = binding.mainactivitytitle
+        MobileAds.initialize(this)
+
 
         val prefs: SharedPreferences = this.getSharedPreferences("boardgame", 0)
         var iddata = prefs.getInt("iddata", 0)

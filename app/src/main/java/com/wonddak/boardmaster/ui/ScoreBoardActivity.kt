@@ -13,12 +13,20 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.wonddak.boardmaster.R
 import com.wonddak.boardmaster.adapters.GameScoreSumRecyclerAdapter
 import com.wonddak.boardmaster.adapters.GameScoreBoardRecyclerAdapter
 import com.wonddak.boardmaster.adapters.GameScoreHeaderRecyclerAdapter
 import com.wonddak.boardmaster.databinding.ActivityScoreBoardBinding
 import com.wonddak.boardmaster.room.AppDatabase
+import com.wonddak.boardmaster.ui.fragment.subitem.DiceFragment
+import com.wonddak.boardmaster.ui.fragment.subitem.TimerFragment
 import com.wonddak.boardmaster.ui.viewmodels.ScoreBoardViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,6 +36,7 @@ import java.util.*
 
 class ScoreBoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScoreBoardBinding
+    private var mInterstitialAd: InterstitialAd? = null
 
     var HeaderAdapter: GameScoreHeaderRecyclerAdapter? = null
     var RoundAdapter: GameScoreBoardRecyclerAdapter? = null
@@ -49,6 +58,28 @@ class ScoreBoardActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbarMain)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
+
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(this,"ca-app-pub-2369897242309575/2648559194", adRequest, object : InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                mInterstitialAd = null //광고 불러오기 실패했을때 null값을 반환
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                mInterstitialAd = interstitialAd //광고 load됬을때 인스턴스된 mInterestitialad를 interestitialAd로 바꿈
+            }
+        })
+        mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
+            override fun onAdDismissedFullScreenContent() {
+            }
+
+            override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                mInterstitialAd = null;
+            }
+        }
 
         db = AppDatabase.getInstance(this)
         val viewModel = ViewModelProvider(this).get(ScoreBoardViewModel::class.java)
@@ -120,13 +151,17 @@ class ScoreBoardActivity : AppCompatActivity() {
                 popMenu.menuInflater.inflate(R.menu.menu_popup, popMenu.menu)
                 popMenu.setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.nav_graph -> {
-                            Toast.makeText(this, "graph", Toast.LENGTH_SHORT).show()
+                        R.id.nav_dice -> {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.sub_item, DiceFragment())
+                                .commit()
                         }
-                        R.id.nav_list -> {
-                            Toast.makeText(this, "list", Toast.LENGTH_SHORT).show()
+                        R.id.nav_timer -> {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.sub_item, TimerFragment())
+                                .commit()
                         }
-                        R.id.nav_main -> {
+                        R.id.nav_order -> {
                             Toast.makeText(this, "main", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -135,7 +170,7 @@ class ScoreBoardActivity : AppCompatActivity() {
                 popMenu.show()
             }
             R.id.action_finish -> {
-                GameDialog(this, this).addEndDialog()
+                GameDialog(this, this).addEndDialog(mInterstitialAd,this)
             }
         }
         return super.onOptionsItemSelected(item)
