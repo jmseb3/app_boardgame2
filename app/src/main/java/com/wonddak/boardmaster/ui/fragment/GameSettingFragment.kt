@@ -1,15 +1,19 @@
 package com.wonddak.boardmaster.ui.fragment
 
 import android.content.Context
+import android.content.Context.SENSOR_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
+import android.os.Vibrator
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
 import androidx.recyclerview.widget.ItemTouchHelper.UP
@@ -29,7 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class GameSettingFragment : Fragment() {
+class GameSettingFragment : Fragment(){
     private var mainActivity: MainActivity? = null
     lateinit var binding: FragmentGameSettingBinding
     private lateinit var db: AppDatabase
@@ -118,7 +122,13 @@ class GameSettingFragment : Fragment() {
                 else -> {
                     GlobalScope.launch(Dispatchers.IO) {
                         val temp_id = db.dataDao()
-                            .insertGame(StartGame(null, binding.settingInputTitle.text.toString(),""))
+                            .insertGame(
+                                StartGame(
+                                    null,
+                                    binding.settingInputTitle.text.toString(),
+                                    ""
+                                )
+                            )
                             .toInt()
                         editor.putInt("iddata", temp_id)
                         editor.commit()
@@ -127,13 +137,12 @@ class GameSettingFragment : Fragment() {
                         }
                         for (name in addpersonlist!!) {
                             db.dataDao()
-                                .insertPerson(PersonList(null, temp_id,name))
-
+                                .insertPerson(PersonList(null, temp_id, name))
                         }
                         launch(Dispatchers.Main) {
-                            val intent = Intent(mainActivity!!,ScoreBoardActivity::class.java)
+                            val intent = Intent(mainActivity!!, ScoreBoardActivity::class.java)
                             startActivity(intent)
-                            mainActivity!!.overridePendingTransition(0,0)
+                            mainActivity!!.overridePendingTransition(0, 0)
                             requireActivity().supportFragmentManager
                                 .popBackStack()
                         }

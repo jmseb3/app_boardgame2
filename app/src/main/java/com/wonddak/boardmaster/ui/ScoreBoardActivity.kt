@@ -161,9 +161,6 @@ class ScoreBoardActivity : AppCompatActivity() {
                                 .replace(R.id.sub_item, TimerFragment())
                                 .commit()
                         }
-                        R.id.nav_order -> {
-                            Toast.makeText(this, "main", Toast.LENGTH_SHORT).show()
-                        }
                     }
                     true
                 }
