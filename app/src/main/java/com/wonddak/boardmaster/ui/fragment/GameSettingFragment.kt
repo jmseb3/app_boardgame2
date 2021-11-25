@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Context.SENSOR_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.Sensor
+import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
@@ -13,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.DOWN
@@ -32,8 +35,9 @@ import com.wonddak.boardmaster.ui.ScoreBoardActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlin.math.sqrt
 
-class GameSettingFragment : Fragment(){
+class GameSettingFragment : Fragment(), SensorEventListener {
     private var mainActivity: MainActivity? = null
     lateinit var binding: FragmentGameSettingBinding
     private lateinit var db: AppDatabase
@@ -45,6 +49,14 @@ class GameSettingFragment : Fragment(){
     var addpersonlist = mutableListOf<String>()
     val title by lazy { requireArguments().getString("title") }
 
+    val mSensorManager by lazy { mainActivity!!.getSystemService(SENSOR_SERVICE) as SensorManager}
+    val mAccelerometer by lazy { mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)}
+
+    private var mShakeTime: Long = 0
+    private val SHAKE_THRESHOLD_GRAVITY: Float = 2.7F
+    private val SHAKE_SKIP_TIME: Int = 500
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +64,7 @@ class GameSettingFragment : Fragment(){
         binding = FragmentGameSettingBinding.inflate(inflater, container, false)
         db = AppDatabase.getInstance(requireContext())
         mainActivity!!.maintitle!!.text = "게임 설정"
+
 
         val touchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(UP + DOWN, 0) {
             override fun onMove(
@@ -172,6 +185,52 @@ class GameSettingFragment : Fragment(){
         } else {
             view.visibility = View.GONE
         }
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+            val axisX: Float = event.values[0]
+            val axisY: Float = event.values[1]
+            val axisZ: Float = event.values[2]
+
+            val gravityX = axisX / SensorManager.GRAVITY_EARTH
+            val gravityY = axisY / SensorManager.GRAVITY_EARTH
+            val gravityZ = axisZ / SensorManager.GRAVITY_EARTH
+
+            val f: Float = gravityX * gravityX + gravityY * gravityY + gravityZ * gravityZ
+            val squaredD: Double = sqrt(f.toDouble())
+            val gForce = squaredD.toFloat()
+
+            if (gForce > SHAKE_THRESHOLD_GRAVITY) {
+                val currnetTime :Long = System.currentTimeMillis()
+                if (mShakeTime + SHAKE_SKIP_TIME > currnetTime) {
+                    return
+                }
+                mShakeTime = currnetTime
+                mShakeTime++
+                addpersonlist.shuffle()
+                myAdapter!!.notifyDataSetChanged()
+                Toast.makeText(mainActivity!!,"순서를 무작위로 변경했습니다.",Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mSensorManager.registerListener(
+            this,
+            mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mSensorManager.unregisterListener(this)
     }
 
     private fun changeVisibility2(view: View, view2: ImageView) {
