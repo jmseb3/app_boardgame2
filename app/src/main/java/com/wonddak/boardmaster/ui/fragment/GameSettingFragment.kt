@@ -53,7 +53,7 @@ class GameSettingFragment : Fragment(), SensorEventListener {
     val mAccelerometer by lazy { mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)}
 
     private var mShakeTime: Long = 0
-    private val SHAKE_THRESHOLD_GRAVITY: Float = 2.7F
+    private val SHAKE_THRESHOLD_GRAVITY: Float = 1.7F
     private val SHAKE_SKIP_TIME: Int = 500
 
 
