@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.wonddak.boardmaster.R
-import com.wonddak.boardmaster.databinding.ActivityMainBinding
 import com.wonddak.boardmaster.room.AppDatabase
 import com.wonddak.boardmaster.ui.fragment.GameSettingFragment
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +22,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.wonddak.boardmaster.ui.fragment.GameListFragment
 import com.google.android.gms.ads.MobileAds
+import com.wonddak.boardmaster.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {

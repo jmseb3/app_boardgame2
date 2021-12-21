@@ -42,19 +42,29 @@ class PersonAddDialog(
         dialog.show()
 
         binding.ok.setOnClickListener {
-            itemlist.add(binding.addNewGameTitleText.text.toString())
-            Toast.makeText(
-                context,
-                "" + binding.addNewGameTitleText.text.toString() + "님을 추가했습니다.",
-                Toast.LENGTH_SHORT
-            ).show()
-            if (binding.checkDismiss.isChecked) {
-                binding.addNewGameTitleText.setText("")
-            } else {
-                dialog.dismiss()
-            }
-            adapter.notifyDataSetChanged()
+            val get_text = binding.addNewGameTitleText.text.toString()
+            if (get_text.isEmpty() or get_text.isBlank()) {
+                Toast.makeText(
+                    context,
+                    "이름을 입력해 주세요",
+                    Toast.LENGTH_SHORT
+                ).show()
 
+            } else {
+                itemlist.add(get_text)
+                Toast.makeText(
+                    context,
+                    "" + get_text + "님을 추가했습니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                if (binding.checkDismiss.isChecked) {
+                    binding.addNewGameTitleText.setText("")
+                } else {
+                    dialog.dismiss()
+                }
+                adapter.notifyDataSetChanged()
+
+            }
         }
 
         binding.cancel.setOnClickListener {
@@ -78,7 +88,7 @@ class GameDialog(
     val prefs: SharedPreferences = context.getSharedPreferences("boardgame", 0)
     val editor = prefs.edit()
 
-    fun addEndDialog(mInterstitialAd: InterstitialAd?,activitys: ScoreBoardActivity) {
+    fun addEndDialog(mInterstitialAd: InterstitialAd?, activitys: ScoreBoardActivity) {
         val binding = DialogGameEndBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
 
@@ -92,7 +102,7 @@ class GameDialog(
             dialog.dismiss()
             editor.putInt("iddata", 0)
             editor.commit()
-            addResultDialog(mInterstitialAd,activitys)
+            addResultDialog(mInterstitialAd, activitys)
         }
 
         binding.cancel.setOnClickListener {
@@ -106,7 +116,7 @@ class GameDialog(
         val name: String
     )
 
-    fun addResultDialog(mInterstitialAd: InterstitialAd?,activitys: ScoreBoardActivity) {
+    fun addResultDialog(mInterstitialAd: InterstitialAd?, activitys: ScoreBoardActivity) {
         val binding = DialogGameResultBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
 

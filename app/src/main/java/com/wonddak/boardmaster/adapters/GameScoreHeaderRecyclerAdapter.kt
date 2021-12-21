@@ -62,27 +62,33 @@ class GameScoreHeaderRecyclerAdapter(
         return personList.size
     }
 
+//    private fun sizeChange(view: View) {
+//        val displaymetrics = DisplayMetrics()
+//        (view.context as Activity).windowManager.defaultDisplay.getMetrics(displaymetrics)
+//        var device_width = displaymetrics.widthPixels
+//        device_width = if (personList.size == 2) {
+//            (device_width - dpToPx(context, 62)) / 2
+//        } else {
+//            (device_width - dpToPx(context, 60 + 1 * personList.size)) / 3
+//        }
+//        view.layoutParams.width = device_width
+//        view.requestLayout()
+//    }
+
     private fun sizeChange(view: View) {
+
         val displaymetrics = DisplayMetrics()
         (view.context as Activity).windowManager.defaultDisplay.getMetrics(displaymetrics)
         var device_width = displaymetrics.widthPixels
-        device_width = if (personList.size == 2) {
-            (device_width - dpToPx(context, 62)) / 2
+        if (personList.size == 2) {
+            device_width = (((device_width * 0.865) / 2).toInt())
         } else {
-            (device_width - dpToPx(context, 60 + 1 * personList.size)) / 3
+            device_width = (((device_width * 0.865) / 3).toInt())
         }
         view.layoutParams.width = device_width
         view.requestLayout()
     }
 
-
-    private fun dpToPx(context: Context, dp: Int): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dp.toFloat(),
-            context.resources.displayMetrics
-        ).toInt()
-    }
 
 
 }
