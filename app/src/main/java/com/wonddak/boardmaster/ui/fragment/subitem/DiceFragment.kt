@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.wonddak.boardmaster.R
 import com.wonddak.boardmaster.databinding.FragmentDiceBinding
@@ -24,15 +25,23 @@ class DiceFragment : Fragment() {
     ): View? {
         val soundPool = SoundPool.Builder().build()
         val soundId = soundPool.load(mainActivity, R.raw.shake_dice, 1)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val soundcheck = sharedPreferences.getBoolean("dice_roll", true)
         binding = FragmentDiceBinding.inflate(inflater, container, false)
+
         binding.clearView.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .detach(this)
                 .commit()
         }
+
         binding.diceImg.setOnClickListener {
             val randomNumber: Int = rng.nextInt(6) + 1
-            soundPool.play(soundId, 1.0f, 1.0f, 0, 0,1.0f)
+            if (soundcheck) {
+
+            } else {
+                soundPool.play(soundId, 1.0f, 1.0f, 0, 0, 1.0f)
+            }
             roll_dice(randomNumber, binding.diceImg)
         }
 

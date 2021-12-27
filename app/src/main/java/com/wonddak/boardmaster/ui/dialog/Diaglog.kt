@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.wonddak.boardmaster.adapters.GameResultRecyclerAdapter
 import com.wonddak.boardmaster.adapters.GameSettingRecyclerAdapter
@@ -27,13 +28,13 @@ class PersonAddDialog(
 ) {
     val dialog = Dialog(context)
     val params = dialog.window!!.attributes
-    val db = AppDatabase.getInstance(context)
     val prefs: SharedPreferences = context.getSharedPreferences("boardgame", 0)
-    val editor = prefs.edit()
 
     fun addNewPersonDialog(itemlist: MutableList<String>, adapter: GameSettingRecyclerAdapter) {
         val binding = DialogAddNewPersonBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val ischeck = sharedPreferences.getBoolean("add_person", true)
 
         params.width = ViewGroup.LayoutParams.MATCH_PARENT
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -57,7 +58,7 @@ class PersonAddDialog(
                     "" + get_text + "님을 추가했습니다.",
                     Toast.LENGTH_SHORT
                 ).show()
-                if (binding.checkDismiss.isChecked) {
+                if (ischeck) {
                     binding.addNewGameTitleText.setText("")
                 } else {
                     dialog.dismiss()

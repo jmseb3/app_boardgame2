@@ -1,0 +1,42 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory app:title="설정">
+
+        <SwitchPreferenceCompat
+            app:key="add_person"
+            app:summary="게임 설정 화면에서 사람추가 후 추가 창을 닫지 않습니다."
+            app:title="사람추가 후 창 닫지 앟기" />
+
+        <SwitchPreferenceCompat
+            app:key="dice_roll"
+            app:summary="점수판에서 주사위 클릭 시 사용 시 나는 소리를 켜고 끕니다."
+            app:title="주사위 소리 음소거 " />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="기타">
+
+
+        <Preference
+            app:key="app_rate"
+            app:title="평가하기" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="market://details?id=com.wonddak.boardmaster"
+                />
+        </Preference>
+
+        <Preference
+            app:key="app_email"
+            app:title="문의하기">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="mailto:jmseb2@gmail.com?subject=보드게임 매니저 관련 문의입니다." />
+        </Preference>
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

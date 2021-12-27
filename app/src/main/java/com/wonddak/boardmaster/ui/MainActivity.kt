@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: AppDatabase
     private var backKeyPressedTime: Long = 0
-    lateinit var mAdView : AdView
+    lateinit var mAdView: AdView
     var context: Context? = null
     var live_Id: MutableLiveData<Int> = MutableLiveData()
     var maintitle: TextView? = null
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        mAdView  = binding.adView
+        mAdView = binding.adView
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
         setContentView(binding.root)
@@ -106,6 +107,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(0,0)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

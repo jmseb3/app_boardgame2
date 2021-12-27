@@ -2,24 +2,12 @@ package com.wonddak.boardmaster.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Typeface
-import android.opengl.Visibility
 import android.util.DisplayMetrics
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.wonddak.boardmaster.databinding.ItemScoreInputBinding
 import com.wonddak.boardmaster.databinding.ItemScoreNameBinding
-import com.wonddak.boardmaster.databinding.ItemScoreRankBinding
-import com.wonddak.boardmaster.ui.ScoreBoardActivity
-import java.lang.NumberFormatException
 
 
 class GameScoreHeaderRecyclerAdapter(
