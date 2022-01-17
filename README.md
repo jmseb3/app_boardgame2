@@ -6,8 +6,8 @@
 
 
 # 실행 화면
-![1](https://play-lh.googleusercontent.com/P_PvKJv2trXYVv7iuOw_QxuXEd12J1pzi5xTFe3e57DFjGRvi1csu9PX8GChWfVU7k4=w526-h296-rw)
-![2](https://play-lh.googleusercontent.com/vbr3c0r30pISfmltDv-vhVnSnjN-5Q38BjOuBOH7G_Hr7sp0x2t0WYmmAil_BCqewQ=w526-h296-rw)
+![1](https://play-lh.googleusercontent.com/P_PvKJv2trXYVv7iuOw_QxuXEd12J1pzi5xTFe3e57DFjGRvi1csu9PX8GChWfVU7k4=w2560-h1440-rw)
+![2](https://play-lh.googleusercontent.com/vbr3c0r30pISfmltDv-vhVnSnjN-5Q38BjOuBOH7G_Hr7sp0x2t0WYmmAil_BCqewQ=w2560-h1440-rw)
 ![3](https://play-lh.googleusercontent.com/Cr2HLU2Cu2xOvSEeK0Xo8naIqzr8sU9Omzxx2sNFpMOpxenAWIqdDUyRaAUnbBXPAw=w2560-h1440-rw)  
 ![4](https://play-lh.googleusercontent.com/G0cnDC2EOjot3LqDpRPFLRY2sI9Tcd4ET-Oz4iwB0VGlfPL_ZM8mUKrSeq82cWrTNF8=w2560-h1440-rw)
 
