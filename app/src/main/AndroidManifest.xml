@@ -18,7 +18,9 @@
             android:exported="false"
             android:label="@string/title_activity_settings" />
 
-        <activity android:name=".ui.SplashActivity">
+        <activity
+            android:name=".ui.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,6 +38,7 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.MainActivity"
+            android:exported="true"
             android:launchMode="singleTop" />
     </application>
 
